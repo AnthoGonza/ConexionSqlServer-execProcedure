@@ -83,27 +83,5 @@ namespace DASHBOARD.DAL
             }
             return dataTable;
         }
-    
-
-        public Type ConvertiTipo(SqlDbType sqlDbType)
-        {
-            var typeMap = new Dictionary<SqlDbType, Type>();
-
-            typeMap[SqlDbType.NVarChar] = typeof(String);
-            typeMap[SqlDbType.Int] = typeof(int);
-            typeMap[SqlDbType.SmallInt] = typeof(Int16);
-            typeMap[SqlDbType.BigInt] = typeof(Int64);
-            typeMap[SqlDbType.VarBinary] = typeof(Byte[]);
-            typeMap[SqlDbType.Bit] = typeof(Boolean);
-            typeMap[SqlDbType.DateTime2] = typeof(DateTime);
-            typeMap[SqlDbType.DateTimeOffset] = typeof(DateTimeOffset);
-            typeMap[SqlDbType.Decimal] = typeof(Decimal);
-            typeMap[SqlDbType.Float] = typeof(Double);
-            typeMap[SqlDbType.Money] = typeof(Decimal);
-            typeMap[SqlDbType.TinyInt] = typeof(Byte);
-            typeMap[SqlDbType.Time] = typeof(TimeSpan);
-
-            return typeMap[(sqlDbType)];
-        }
     }
 }
