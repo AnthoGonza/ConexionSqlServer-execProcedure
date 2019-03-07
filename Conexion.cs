@@ -102,11 +102,6 @@ namespace DASHBOARD.DAL
                 return null;
             }
         }
-        public void verParamter(SqlCommand command) {
-            foreach (SqlParameter par in command.Parameters) {
-                Debug.WriteLine("TYPO DATA: " + par.SqlDbType + "....VALOR: " + par.Value);
-            }
-        }
         public void Dispose() {
         }
 
