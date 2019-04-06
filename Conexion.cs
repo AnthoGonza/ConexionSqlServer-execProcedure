@@ -16,17 +16,10 @@ namespace Conexion.DAL
         public CommandType commandType { get; set; }
 
         public Conexion() {
-            this.catalog = "";
-            this.command = "";
+            this.catalog = null;
+            this.command = null;
             this.commandType = CommandType.Text;
-            this.parameters = (SqlParameterCollection)typeof(SqlParameterCollection).GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, null, Type.EmptyTypes, null).Invoke(null);
-        }
-        public Conexion(string catalog,string command, CommandType commandType)
-        {
-            this.catalog = catalog;
-            this.command = command;
-            this.commandType = commandType;
-            this.parameters = (SqlParameterCollection)typeof(SqlParameterCollection).GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, null, Type.EmptyTypes, null).Invoke(null);
+            this.parameters = null;
         }
 
         public DataTable executeQuery() {
