@@ -98,7 +98,7 @@ namespace Conexion.DAL
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("Error/executeQuery/Conexion/DASHBOARD.DAL: " + ex);
+                Debug.WriteLine("Error/executeQuery/Conexion/Conexion.DAL: " + ex);
                 return null;
             }
         }
