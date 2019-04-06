@@ -5,83 +5,27 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Reflection;
 
-namespace DASHBOARD.DAL
+namespace Conexion.DAL
 {
     class TransformFormat
     {
-        public static List<T> ConvertTableToList<T>(DataTable dt) {
-            List<T> data = new List<T>();
-            foreach (DataRow row in transformatTable(dt).Rows)
-            {
-                T item = GetITem<T>(row);
-                data.Add(item);
-            }
-            return data;
-        }
-        private static T GetITem<T>(DataRow dr)
+        public static List<T> ConvertTableToList<T>(DataTable dt) 
         {
-            Type temp = typeof(T);
-            T obj = Activator.CreateInstance<T>();
-            foreach (DataColumn column in dr.Table.Columns)
-            {
-                foreach (PropertyInfo pro in temp.GetProperties()) {
-                    if (pro.Name == column.ColumnName)
-                    {
-                        pro.SetValue(obj,dr[column.ColumnName], null);
-                    }
-                    else
-                    {
-                        continue;
-                    }
-                }
-            }
-            return obj;
-        }
-
-        public static DataTable transformatTable(DataTable dt)
-        {
-            Debug.WriteLine("N° COL: " + dt.Columns.Count + "N° ROWS: " + dt.Rows.Count);
-            DataTable dataTable = new DataTable();
-            foreach (DataColumn column in dt.Columns)
-            {
-                DataColumn dataColumn = new DataColumn(column.ColumnName);
-                Debug.WriteLine("---------NOMNRE COL: "+ column.ColumnName);
-                Debug.WriteLine("TIPO COL AN: " + column.DataType);
-                switch (Type.GetTypeCode(column.DataType))
+            var columnName = dt.Columns.Cast<DataColumn>().Select(c => c.ColumnName).ToList();
+            var properties = typeof(T).GetProperties();
+            return dt.AsEnumerable().Select(row=> {
+                var objT = Activator.CreateInstance<T>();
+                foreach (var pro in properties)
                 {
-                    case TypeCode.DateTime:
-                        dataColumn.DataType = typeof(String);
-                        break;
-                    default:
-                        dataColumn.DataType = column.DataType;
-                        break;
-                }
-                Debug.WriteLine("TIPO COL NU: " + dataColumn.DataType);
-                dataTable.Columns.Add(dataColumn);
-            }
-            foreach (DataRow row in dt.Rows) {
-                DataRow dr = dataTable.NewRow();
-                int index = 0; 
-                foreach (DataColumn co in dataTable.Columns )
-                {
-                    switch (Type.GetTypeCode(co.DataType))
+                    if (columnName.Contains(pro.Name))
                     {
-                        case TypeCode.String:
-                            dr[index] = row[co.ColumnName].ToString();
-                            break;
-                        case TypeCode.Int32:
-                            dr[index] = int.Parse(row[co.ColumnName].ToString());
-                            break;
-                        case TypeCode.Decimal:
-                            dr[index] = decimal.Parse(row[co.ColumnName].ToString());
-                            break;
+                        PropertyInfo property = objT.GetType().GetProperty(pro.Name);
+                        pro.SetValue(objT, row[pro.Name] == DBNull.Value ? null : Convert.ChangeType(row[pro.Name], property.GetType()));
                     }
-                    index++;
                 }
-                //0800 760 107
-                dataTable.Rows.Add(dr);
-            }
-            return dataTable;
+                return objT;
+            }).ToList();
         }
+       
     }
 }
