@@ -6,7 +6,7 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Reflection;
 
-namespace DASHBOARD.DAL
+namespace Conexion.DAL
 {
     public class Conexion : IDisposable
     {
